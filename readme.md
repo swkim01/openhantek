@@ -74,8 +74,10 @@ You can adjust samplerate and use software triggering for 6022BE.
    - Support 48, 24, 16, 8, 4, 2, 1 M and 500, 200, 100 k Hz samplerates with modded firmware by [jhoenicke](https://github.com/rpcope1/Hantek6022API) 
    - Support software trigger by detecting rising or falling edge of signal. Use software trigger item on the trigger menu. For trigger level, adjust left arrow on the right-side of the graph.
    - Note that I dropped first 1000 samples due to unstable/unusual reading.
-   - Fix triggering to generate a steady drawing and Make samplerate adjust to chosen timebase by [KimBP](https://github.com/KimBP/openhantek).
-   - Fix bug and add color settings for printing.
+
+## Credits
+
+[@KimBP](https://github.com/KimBP/openhantek) helped to fix triggering to generate a steady drawing and make samplerate adjust to chosen timebase.
 
 ## Contribute
 Please use Github Issues to report any problems or enhancements or send us pull requests. Some random notes:
