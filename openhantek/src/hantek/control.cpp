@@ -231,7 +231,7 @@ namespace Hantek {
 		int errorCode;
 
 		// Command not supported by this model
-		if (this->device->getModel() == MODEL_DSO6022BE)
+		if (this->device->getModel() == MODEL_DSO6022BE || this->device->getModel() == MODEL_DSO6022BL)
 			return CAPTURE_READY;
 		
 		errorCode = this->device->bulkCommand(this->command[BULK_GETCAPTURESTATE], 1);
@@ -253,7 +253,7 @@ namespace Hantek {
 	int Control::getSamples(bool process) {
 		int errorCode;
 
-		if (this->device->getModel() != MODEL_DSO6022BE) {
+		if (this->device->getModel() != MODEL_DSO6022BE && this->device->getModel() != MODEL_DSO6022BL) {
 			// Request data
 			errorCode = this->device->bulkCommand(this->command[BULK_GETDATA], 1);
 			if(errorCode < 0)
@@ -352,7 +352,7 @@ namespace Hantek {
 				// Normal mode, channels are using their separate buffers
 				sampleCount = totalSampleCount / HANTEK_CHANNELS;
 				// if device is 6022BE, drop first 1000 samples
-				if (this->device->getModel() == MODEL_DSO6022BE)
+				if (this->device->getModel() == MODEL_DSO6022BE || this->device->getModel() == MODEL_DSO6022BL)
 					sampleCount -= 1000;
 				for(int channel = 0; channel < HANTEK_CHANNELS; ++channel) {
 					if(this->settings.voltage[channel].used) {
@@ -375,7 +375,7 @@ namespace Hantek {
 							}
 						}
 						else {
-							if (this->device->getModel() == MODEL_DSO6022BE) {
+							if (this->device->getModel() == MODEL_DSO6022BE || this->device->getModel() == MODEL_DSO6022BL) {
 								bufferPosition += channel;
 						        // if device is 6022BE, offset 1000 incrementally
 								bufferPosition += 1000 * 2;
@@ -387,7 +387,7 @@ namespace Hantek {
 								if(bufferPosition >= totalSampleCount)
 									bufferPosition %= totalSampleCount;
 
-								if (this->device->getModel() == MODEL_DSO6022BE) {
+								if (this->device->getModel() == MODEL_DSO6022BE || this->device->getModel() == MODEL_DSO6022BL) {
                                     double dataBuf = (double) ((int) (data[bufferPosition] - 0x83) );
 									this->samples[channel][realPosition] = (dataBuf
 										 / this->specification.voltageLimit[channel][this->settings.voltage[channel].gain])
@@ -831,6 +831,7 @@ namespace Hantek {
 				break;
 
 			case MODEL_DSO6022BE:
+			case MODEL_DSO6022BL:
 				// 6022BE do not support any bulk commands
 				this->control[CONTROLINDEX_SETVOLTDIV_CH1] = new ControlSetVoltDIV_CH1();
 				this->controlCode[CONTROLINDEX_SETVOLTDIV_CH1] = CONTROL_SETVOLTDIV_CH1;
@@ -864,7 +865,7 @@ namespace Hantek {
 			this->controlPending[control] = true;
 
 		// Disable controls not supported by 6022BE
-		if (this->device->getModel() == MODEL_DSO6022BE) {
+		if (this->device->getModel() == MODEL_DSO6022BE || this->device->getModel() == MODEL_DSO6022BL) {
 		  this->controlPending[CONTROLINDEX_SETOFFSET] = false;
 		  this->controlPending[CONTROLINDEX_SETRELAYS] = false;
 		}
@@ -941,6 +942,7 @@ namespace Hantek {
 				break;
 			
 			case MODEL_DSO6022BE:
+			case MODEL_DSO6022BL:
 				this->specification.samplerate.single.base = 1e6;
 				this->specification.samplerate.single.max = 48e6;
 				this->specification.samplerate.single.maxDownsampler = 10;
@@ -1007,7 +1009,7 @@ namespace Hantek {
 			emit recordTimeChanged((double) this->settings.samplerate.limits->recordLengths[this->settings.recordLengthId] / this->settings.samplerate.current);
 		emit samplerateChanged(this->settings.samplerate.current);
 
-		if(this->device->getModel() == MODEL_DSO6022BE) {
+		if(this->device->getModel() == MODEL_DSO6022BE || this->device->getModel() == MODEL_DSO6022BL) {
 			QList<double> sampleSteps;
 			sampleSteps << 1.0 << 2.0 << 5.0 << 10.0 << 20.0 << 40.0 << 80.0 << 160.0 << 240.0 << 480.0;
 			emit samplerateSet(1, sampleSteps);
@@ -1048,7 +1050,7 @@ namespace Hantek {
 			this->settings.samplerate.target.samplerateSet = true;
 		}
 		
-		if (this->device->getModel() != MODEL_DSO6022BE) {
+		if (this->device->getModel() != MODEL_DSO6022BE && this->device->getModel() != MODEL_DSO6022BL) {
 			// When possible, enable fast rate if it is required to reach the requested samplerate
 			bool fastRate = (this->settings.usedChannels <= 1) && (samplerate > this->specification.samplerate.single.max / this->specification.bufferDividers[this->settings.recordLengthId]);
 			
@@ -1096,7 +1098,7 @@ namespace Hantek {
 			this->settings.samplerate.target.samplerateSet = false;
 		}
 		
-		if (this->device->getModel() != MODEL_DSO6022BE) {
+		if (this->device->getModel() != MODEL_DSO6022BE && this->device->getModel() != MODEL_DSO6022BL) {
 			// Calculate the maximum samplerate that would still provide the requested duration
 			double maxSamplerate = (double) this->specification.samplerate.single.recordLengths[this->settings.recordLengthId] / duration;
 
@@ -1221,7 +1223,7 @@ namespace Hantek {
 	//		Dso::ERROR_NONE;
 
 		// SetRelays control command for coupling relays
-		if (this->device->getModel() != MODEL_DSO6022BE) {
+		if (this->device->getModel() != MODEL_DSO6022BE && this->device->getModel() != MODEL_DSO6022BL) {
 			static_cast<ControlSetRelays *>(this->control[CONTROLINDEX_SETRELAYS])->setCoupling(channel, coupling != Dso::COUPLING_AC);
 			this->controlPending[CONTROLINDEX_SETRELAYS] = true;
 		}
@@ -1247,7 +1249,7 @@ namespace Hantek {
 				break;
 
 		// Fixme, shoulb be some kind of protocol check instead of model check.
-		if (this->device->getModel() == MODEL_DSO6022BE) {
+		if (this->device->getModel() == MODEL_DSO6022BE || this->device->getModel() == MODEL_DSO6022BL) {
 			if (channel == 0) {
 				static_cast<ControlSetVoltDIV_CH1 *>(this->control[CONTROLINDEX_SETVOLTDIV_CH1])->setDiv(this->specification.gainDiv[gainId]);
 				this->controlPending[CONTROLINDEX_SETVOLTDIV_CH1] = true;
@@ -1296,7 +1298,7 @@ namespace Hantek {
 		// SetOffset control command for channel offset
 		// Don't set control command if 6022be.
 		// Otherwise, pipe error messages will be appeared.
-		if (this->device->getModel() != MODEL_DSO6022BE) {
+		if (this->device->getModel() != MODEL_DSO6022BE && this->device->getModel() != MODEL_DSO6022BL) {
 			static_cast<ControlSetOffset *>(this->control[CONTROLINDEX_SETOFFSET])->setChannel(channel, offsetValue);
 			this->controlPending[CONTROLINDEX_SETOFFSET] = true;
 		}
@@ -1411,7 +1413,8 @@ namespace Hantek {
 		
 		// Check if the set channel is the trigger source
 		if(!this->settings.trigger.special && channel == this->settings.trigger.source
-			&& this->device->getModel() != MODEL_DSO6022BE) {
+			&& this->device->getModel() != MODEL_DSO6022BE
+			&& this->device->getModel() != MODEL_DSO6022BL) {
 			// SetOffset control command for trigger level
 			static_cast<ControlSetOffset *>(this->control[CONTROLINDEX_SETOFFSET])->setTrigger(levelValue);
 			this->controlPending[CONTROLINDEX_SETOFFSET] = true;

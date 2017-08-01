@@ -40,8 +40,8 @@ namespace Hantek {
 	/// \param parent The parent widget.
 	Device::Device(QObject *parent) : QObject(parent) {
 		// Product ids and names for the Model enum
-		this->modelIds << 0x2090 << 0x2150 << 0x2250 << 0x5200 << 0x520A << 0x6022;
-		this->modelStrings << "DSO-2090" << "DSO-2150" << "DSO-2250" << "DSO-5200" << "DSO-5200A" << "DSO-6022BE";
+		this->modelIds << 0x2090 << 0x2150 << 0x2250 << 0x5200 << 0x520A << 0x6022 << 0x602a;
+		this->modelStrings << "DSO-2090" << "DSO-2150" << "DSO-2250" << "DSO-5200" << "DSO-5200A" << "DSO-6022BE" << "DSO-6022BL";
 		this->model = MODEL_UNKNOWN;
 		
 		this->beginCommandControl = new ControlBeginCommand();
@@ -136,7 +136,7 @@ namespace Hantek {
 										this->outPacketLength = endpointDescriptor->wMaxPacketSize;
 										break;
 									case HANTEK_EP_IN:
-										if (this->getModel() == MODEL_DSO6022BE)
+										if (this->getModel() == MODEL_DSO6022BE || this->getModel() == MODEL_DSO6022BL)
 											this->inPacketLength = 16384;
 										else
 											this->inPacketLength = endpointDescriptor->wMaxPacketSize;
@@ -251,7 +251,7 @@ namespace Hantek {
 			return LIBUSB_ERROR_NO_DEVICE;
 
 		// don't send bulk command if dso6022be
-		if (this->getModel() == MODEL_DSO6022BE)
+		if (this->getModel() == MODEL_DSO6022BE || this->getModel() == MODEL_DSO6022BL)
 			return 0;
 
 		// Send BeginCommand control command
