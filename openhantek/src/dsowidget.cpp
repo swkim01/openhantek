@@ -485,16 +485,17 @@ void DsoWidget::updateZoom(bool enabled) {
 		this->updateMarkerDetails();
 	else
 		this->markerInfoLabel->setText(tr("Marker 1/2"));
-	
 	this->repaint();
 }
 
 /// \brief Prints analyzed data.
 void DsoWidget::dataAnalyzed() {
 	for(int channel = 0; channel < this->settings->scope.voltage.count(); ++channel) {
-		if(this->settings->scope.voltage[channel].used && this->dataAnalyzer->data(channel)) {			
+		if(this->settings->scope.voltage[channel].used && this->dataAnalyzer->data(channel)) {
+
+			double scale_factor = this->settings->scope.voltage[channel].probe_gain;
 			// Amplitude string representation (4 significant digits)
-			this->measurementAmplitudeLabel[channel]->setText(Helper::valueToString(this->dataAnalyzer->data(channel)->amplitude, Helper::UNIT_VOLTS, 4));
+			this->measurementAmplitudeLabel[channel]->setText(Helper::valueToString(this->dataAnalyzer->data(channel)->amplitude * scale_factor, Helper::UNIT_VOLTS, 4));
 			// Frequency string representation (5 significant digits)
 			this->measurementFrequencyLabel[channel]->setText(Helper::valueToString(this->dataAnalyzer->data(channel)->frequency, Helper::UNIT_HERTZ, 5));
 		}

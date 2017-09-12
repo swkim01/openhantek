@@ -162,6 +162,7 @@ class VoltageDock : public QDockWidget {
 		
 		int setCoupling(int channel, Dso::Coupling coupling);
 		int setGain(int channel, double gain);
+        int setProbeGain(int channel, double probeGain);
 		int setMode(Dso::MathMode mode);
 		int setUsed(int channel, bool used);
 	
@@ -173,18 +174,22 @@ class VoltageDock : public QDockWidget {
 		QList<QCheckBox *> usedCheckBox; ///< Enable/disable a specific channel
 		QList<QComboBox *> gainComboBox; ///< Select the vertical gain for the channels
 		QList<QComboBox *> miscComboBox; ///< Select coupling for real and mode for math channels
+		QList<QComboBox *> probeGainCombobox; ///< Select the voltage division of the probe
 		
 		DsoSettings *settings; ///< The settings provided by the parent class
 		
 		QStringList couplingStrings; ///< The strings for the couplings
 		QStringList modeStrings; ///< The strings for the math mode
 		QList<double> gainSteps; ///< The selectable gain steps
+        QList<double> probeGainSteps;
+        QStringList probeGainStrings;
 		QStringList gainStrings; ///< String representations for the gain steps
 	
 	protected slots:
 		void gainSelected(int index);
 		void miscSelected(int index);
 		void usedSwitched(bool checked);
+		void probeGainSelected(int index);
 	
 	signals:
 		void couplingChanged(unsigned int channel, Dso::Coupling coupling); ///< A coupling has been selected
