@@ -204,8 +204,9 @@ void GlGenerator::generateGraphs() {
 							std::vector<double>::const_iterator dataIterator = this->dataAnalyzer->data(channel)->samples.voltage.sample.begin();
 							const double gain = this->settings->scope.voltage[channel].gain;
 							const double offset = this->settings->scope.voltage[channel].offset;
-							const double probe_gain = this->settings->scope.voltage[channel].probe_gain;
-							
+//							const double probe_gain = this->settings->scope.voltage[channel].probe_gain;
+							const double probe_gain = 1;
+
 							std::advance(dataIterator, swTriggerStart-preTrigSamples);
 
 							for(unsigned int position = 0; position < sampleCount; ++position) {
@@ -259,7 +260,8 @@ void GlGenerator::generateGraphs() {
 					std::vector<double>::const_iterator yIterator = this->dataAnalyzer->data(yChannel)->samples.voltage.sample.begin();
 					const double xGain = this->settings->scope.voltage[xChannel].gain;
 					const double yGain = this->settings->scope.voltage[yChannel].gain;
-					const double probeGain = this->settings->scope.voltage[xChannel].probe_gain;
+//					const double probeGain = this->settings->scope.voltage[xChannel].probe_gain;
+					const double probeGain = 1;
 					const double xOffset = this->settings->scope.voltage[xChannel].offset;
 					const double yOffset = this->settings->scope.voltage[yChannel].offset;
 					

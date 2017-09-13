@@ -147,10 +147,21 @@ void DataAnalyzer::run() {
 			// Physical channels
 			if(channel < this->settings->scope.physicalChannels) {
 				// Copy the buffer of the oscilloscope into the sample buffer
-				if(this->waitingDataAppend)
-					channelData->samples.voltage.sample.insert(channelData->samples.voltage.sample.end(), this->waitingData->at(channel).begin(), this->waitingData->at(channel).end());
+                // Update the values from the oscilloscope depending on the attenuation from the probe
+                unsigned int initial_position = 0;
+				if(this->waitingDataAppend) {
+                    initial_position = channelData->samples.voltage.sample.size();
+                    channelData->samples.voltage.sample.insert(channelData->samples.voltage.sample.end(),
+                                                               this->waitingData->at(channel).begin(),
+                                                               this->waitingData->at(channel).end());
+                }
 				else
-					channelData->samples.voltage.sample = this->waitingData->at(channel);
+                    channelData->samples.voltage.sample = this->waitingData->at(channel);
+
+                unsigned long sampleCount = channelData->samples.voltage.sample.size();
+                for (unsigned int position = 0 + initial_position; position < sampleCount; ++position) {
+                    channelData->samples.voltage.sample[position] *= this->settings->scope.voltage[channel].probe_gain;
+                }
 			}
 			// Math channel
 			else {
@@ -341,8 +352,8 @@ void DataAnalyzer::run() {
 				else if(channelData->samples.voltage.sample[position] > maximalVoltage)
 					maximalVoltage = channelData->samples.voltage.sample[position];
 			}
-			double scale_factor = this->settings->scope.voltage[channel].probe_gain;
-			channelData->amplitude = (maximalVoltage - minimalVoltage) * scale_factor;
+//			double scale_factor = this->settings->scope.voltage[channel].probe_gain;
+			channelData->amplitude = (maximalVoltage - minimalVoltage) ;
 			
 			// Get the frequency from the correlation results
 			double minimumCorrelation = correlation[0];

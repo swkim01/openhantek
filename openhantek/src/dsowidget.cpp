@@ -535,11 +535,11 @@ void DsoWidget::updateTriggerPosition(int index, double value) {
 /// \param channel The index of the slider.
 /// \param value The new trigger level.
 void DsoWidget::updateTriggerLevel(int channel, double value) {
-	this->settings->scope.voltage[channel].trigger = value;
-	
+	this->settings->scope.voltage[channel].trigger = value ;
+
 	this->updateTriggerDetails();
 	
-	emit triggerLevelChanged(channel, value);
+	emit triggerLevelChanged(channel, value );
 }
 
 /// \brief Handles valueChanged signal from the marker slider.
