@@ -659,6 +659,11 @@ int VoltageDock::setGain(int channel, double gain) {
 	return index;
 }
 
+
+/// \brief Sets the probe gain for a channel.
+/// \param channel The channel, whose probe gain should be set.
+/// \param probeGain The probe gain in volts.
+/// \return Index of probeGain-value, -1 on error.
 int VoltageDock::setProbeGain(int channel, double probeGain) {
     if(channel < 0 || channel >= this->settings->scope.voltage.count())
         return -1;
