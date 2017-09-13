@@ -493,7 +493,8 @@ void DsoWidget::dataAnalyzed() {
 	for(int channel = 0; channel < this->settings->scope.voltage.count(); ++channel) {
 		if(this->settings->scope.voltage[channel].used && this->dataAnalyzer->data(channel)) {
 
-			double scale_factor = this->settings->scope.voltage[channel].probe_gain;
+//			double scale_factor = this->settings->scope.voltage[channel].probe_gain;
+			double scale_factor = 1;
 			// Amplitude string representation (4 significant digits)
 			this->measurementAmplitudeLabel[channel]->setText(Helper::valueToString(this->dataAnalyzer->data(channel)->amplitude * scale_factor, Helper::UNIT_VOLTS, 4));
 			// Frequency string representation (5 significant digits)

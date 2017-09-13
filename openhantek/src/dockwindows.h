@@ -196,6 +196,7 @@ class VoltageDock : public QDockWidget {
 		void gainChanged(unsigned int channel, double gain); ///< A gain has been selected
 		void modeChanged(Dso::MathMode mode); ///< The mode for the math channels has been changed
 		void usedChanged(unsigned int channel, bool used); ///< A channel has been enabled/disabled
+		void probeGainChanged(unsigned int channel, double gain);
 };
 
 

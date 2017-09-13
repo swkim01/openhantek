@@ -341,8 +341,8 @@ void DataAnalyzer::run() {
 				else if(channelData->samples.voltage.sample[position] > maximalVoltage)
 					maximalVoltage = channelData->samples.voltage.sample[position];
 			}
-			
-			channelData->amplitude = maximalVoltage - minimalVoltage;
+			double scale_factor = this->settings->scope.voltage[channel].probe_gain;
+			channelData->amplitude = (maximalVoltage - minimalVoltage) * scale_factor;
 			
 			// Get the frequency from the correlation results
 			double minimumCorrelation = correlation[0];
