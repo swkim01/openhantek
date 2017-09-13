@@ -560,16 +560,19 @@ VoltageDock::VoltageDock(DsoSettings *settings, QWidget *parent, Qt::WindowFlags
 	// Initialize elements
 	for(int channel = 0; channel < this->settings->scope.voltage.count(); ++channel) {
 		this->miscComboBox.append(new QComboBox());
-		if(channel < (int) this->settings->scope.physicalChannels)
-			this->miscComboBox[channel]->addItems(this->couplingStrings);
+		if(channel < (int) this->settings->scope.physicalChannels) {
+            this->miscComboBox[channel]->addItems(this->couplingStrings);
+            this->probeGainCombobox.append(new QComboBox());
+            this->probeGainCombobox[channel]->addItems(this->probeGainStrings);
+        }
 		else
 			this->miscComboBox[channel]->addItems(this->modeStrings);
 		
 		this->gainComboBox.append(new QComboBox());
 		this->gainComboBox[channel]->addItems(this->gainStrings);
+        if(channel < (int) this->settings->scope.physicalChannels) {
 
-        this->probeGainCombobox.append(new QComboBox());
-        this->probeGainCombobox[channel]->addItems(this->probeGainStrings);
+        }
 
 		this->usedCheckBox.append(new QCheckBox(this->settings->scope.voltage[channel].name));
 
@@ -583,7 +586,8 @@ VoltageDock::VoltageDock(DsoSettings *settings, QWidget *parent, Qt::WindowFlags
 		this->dockLayout->addWidget(this->usedCheckBox[channel], channel * 3, 0);
 		this->dockLayout->addWidget(this->gainComboBox[channel], channel * 3, 1);
 		this->dockLayout->addWidget(this->miscComboBox[channel], channel * 3 + 1, 1);
-		this->dockLayout->addWidget(this->probeGainCombobox[channel], channel * 3 +2, 1);
+        if(channel < (int) this->settings->scope.physicalChannels)
+		    this->dockLayout->addWidget(this->probeGainCombobox[channel], channel * 3 +2, 1);
 	}
 
 	this->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -597,17 +601,19 @@ VoltageDock::VoltageDock(DsoSettings *settings, QWidget *parent, Qt::WindowFlags
 		connect(this->gainComboBox[channel], SIGNAL(currentIndexChanged(int)), this, SLOT(gainSelected(int)));
 		connect(this->miscComboBox[channel], SIGNAL(currentIndexChanged(int)), this, SLOT(miscSelected(int)));
 		connect(this->usedCheckBox[channel], SIGNAL(toggled(bool)), this, SLOT(usedSwitched(bool)));
-		connect(this->probeGainCombobox[channel], SIGNAL(currentIndexChanged(int)), this, SLOT(probeGainSelected(int)));
+        if(channel < (int) this->settings->scope.physicalChannels)
+		    connect(this->probeGainCombobox[channel], SIGNAL(currentIndexChanged(int)), this, SLOT(probeGainSelected(int)));
 	}
 	
 	// Set values
 	for(int channel = 0; channel < this->settings->scope.voltage.count(); ++channel) {
-		if(channel < (int) this->settings->scope.physicalChannels)
-			this->setCoupling(channel, (Dso::Coupling) this->settings->scope.voltage[channel].misc);
-		else
+		if(channel < (int) this->settings->scope.physicalChannels) {
+            this->setCoupling(channel, (Dso::Coupling) this->settings->scope.voltage[channel].misc);
+            this->setProbeGain(channel, this->settings->scope.voltage[channel].probe_gain);
+        }
+        else
 			this->setMode((Dso::MathMode) this->settings->scope.voltage[channel].misc);
 		this->setGain(channel, this->settings->scope.voltage[channel].gain);
-        this->setProbeGain(channel, this->settings->scope.voltage[channel].probe_gain);
 		this->setUsed(channel, this->settings->scope.voltage[channel].used);
 	}
 }

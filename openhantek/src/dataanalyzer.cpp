@@ -147,7 +147,6 @@ void DataAnalyzer::run() {
 			// Physical channels
 			if(channel < this->settings->scope.physicalChannels) {
 				// Copy the buffer of the oscilloscope into the sample buffer
-                // Update the values from the oscilloscope depending on the attenuation from the probe
                 unsigned int initial_position = 0;
 				if(this->waitingDataAppend) {
                     initial_position = channelData->samples.voltage.sample.size();
@@ -157,9 +156,9 @@ void DataAnalyzer::run() {
                 }
 				else
                     channelData->samples.voltage.sample = this->waitingData->at(channel);
-
+                // Update the values from the oscilloscope depending on the attenuation from the probe
                 unsigned long sampleCount = channelData->samples.voltage.sample.size();
-                for (unsigned int position = 0 + initial_position; position < sampleCount; ++position) {
+                for (unsigned int position = 0 + initial_position; position < sampleCount; position++) {
                     channelData->samples.voltage.sample[position] *= this->settings->scope.voltage[channel].probe_gain;
                 }
 			}
