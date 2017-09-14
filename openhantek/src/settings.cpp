@@ -142,6 +142,7 @@ void DsoSettings::setChannelCount(unsigned int channels) {
 		if(this->scope.voltage.count() <= channel + 1) {
 			DsoSettingsScopeVoltage newVoltage;
 			newVoltage.gain = 1.0;
+			newVoltage.probe_gain = 1.0;
 			newVoltage.misc = Dso::COUPLING_DC;
 			newVoltage.name = QApplication::tr("CH%1").arg(channel + 1);
 			newVoltage.offset = 0.0;
@@ -176,6 +177,7 @@ void DsoSettings::setChannelCount(unsigned int channels) {
 	if(this->scope.voltage.count() <= (int) channels) {
 		DsoSettingsScopeVoltage newVoltage;
 		newVoltage.gain = 1.0;
+		newVoltage.probe_gain = 1.0;
 		newVoltage.misc = Dso::MATHMODE_1ADD2;
 		newVoltage.name = QApplication::tr("MATH");
 		newVoltage.offset = 0.0;
@@ -315,6 +317,8 @@ int DsoSettings::load(const QString &fileName) {
 		settingsLoader->beginGroup(QString("vertical%1").arg(channel));
 		if(settingsLoader->contains("gain"))
 			this->scope.voltage[channel].gain = settingsLoader->value("gain").toDouble();
+		if(settingsLoader->contains("probeGain"))
+			this->scope.voltage[channel].probe_gain = settingsLoader->value("probeGain").toDouble();
 		if(settingsLoader->contains("misc"))
 			this->scope.voltage[channel].misc = settingsLoader->value("misc").toInt();
 		if(settingsLoader->contains("offset"))
@@ -481,6 +485,7 @@ int DsoSettings::save(const QString &fileName) {
 	for(int channel = 0; channel < this->scope.voltage.count(); ++channel) {
 		settingsSaver->beginGroup(QString("vertical%1").arg(channel));
 		settingsSaver->setValue("gain", this->scope.voltage[channel].gain);
+		settingsSaver->setValue("probeGain", this->scope.voltage[channel].probe_gain);
 		settingsSaver->setValue("misc", this->scope.voltage[channel].misc);
 		settingsSaver->setValue("offset", this->scope.voltage[channel].offset);
 		settingsSaver->setValue("trigger", this->scope.voltage[channel].trigger);

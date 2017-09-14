@@ -204,12 +204,12 @@ void GlGenerator::generateGraphs() {
 							std::vector<double>::const_iterator dataIterator = this->dataAnalyzer->data(channel)->samples.voltage.sample.begin();
 							const double gain = this->settings->scope.voltage[channel].gain;
 							const double offset = this->settings->scope.voltage[channel].offset;
-							
+
 							std::advance(dataIterator, swTriggerStart-preTrigSamples);
 
 							for(unsigned int position = 0; position < sampleCount; ++position) {
 								*(glIterator++) = position * horizontalFactor - DIVS_TIME / 2;
-								*(glIterator++) = *(dataIterator++) / gain + offset;
+								*(glIterator++) = *(dataIterator++) / gain  + offset;
 							}
 						}
 						else {

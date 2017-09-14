@@ -485,14 +485,14 @@ void DsoWidget::updateZoom(bool enabled) {
 		this->updateMarkerDetails();
 	else
 		this->markerInfoLabel->setText(tr("Marker 1/2"));
-	
 	this->repaint();
 }
 
 /// \brief Prints analyzed data.
 void DsoWidget::dataAnalyzed() {
 	for(int channel = 0; channel < this->settings->scope.voltage.count(); ++channel) {
-		if(this->settings->scope.voltage[channel].used && this->dataAnalyzer->data(channel)) {			
+		if(this->settings->scope.voltage[channel].used && this->dataAnalyzer->data(channel)) {
+
 			// Amplitude string representation (4 significant digits)
 			this->measurementAmplitudeLabel[channel]->setText(Helper::valueToString(this->dataAnalyzer->data(channel)->amplitude, Helper::UNIT_VOLTS, 4));
 			// Frequency string representation (5 significant digits)
@@ -535,11 +535,11 @@ void DsoWidget::updateTriggerPosition(int index, double value) {
 /// \param channel The index of the slider.
 /// \param value The new trigger level.
 void DsoWidget::updateTriggerLevel(int channel, double value) {
-	this->settings->scope.voltage[channel].trigger = value;
-	
+	this->settings->scope.voltage[channel].trigger = value ;
+
 	this->updateTriggerDetails();
 	
-	emit triggerLevelChanged(channel, value);
+	emit triggerLevelChanged(channel, value );
 }
 
 /// \brief Handles valueChanged signal from the marker slider.
