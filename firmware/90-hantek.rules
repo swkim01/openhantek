@@ -24,5 +24,5 @@ SUBSYSTEM=="usb", ACTION=="add", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="4b4/
 ATTRS{idVendor}=="04b5", ATTRS{idProduct}=="6022", MODE="0660", GROUP="plugdev"
 
 # Hantek DSO-6022BL
-SUBSYSTEM=="usb", ACTION=="add", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="4b4/602a/*", RUN+="/sbin/fxload -t fx2 -I /usr/local/share/hantek/dso6022be-firmware.hex -s /usr/local/share/hantek/dso6022be-loader.hex -D $env{DEVNAME}"
+SUBSYSTEM=="usb", ACTION=="add", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="4b4/602a/*", RUN+="/sbin/fxload -t fx2 -I /usr/local/share/hantek/dso6022bl-firmware.hex -s /usr/local/share/hantek/dso6022bl-loader.hex -D $env{DEVNAME}"
 ATTRS{idVendor}=="04b5", ATTRS{idProduct}=="602a", MODE="0660", GROUP="plugdev"
