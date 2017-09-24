@@ -421,6 +421,16 @@ void DsoWidget::updateVoltageGain(unsigned int channel) {
 	this->updateVoltageDetails(channel);
 }
 
+/// \brief Handles probeGainChanged signal from the voltage dock.
+/// \param channel The channel whose probe gain was changed.
+void DsoWidget::updateProbeGain(unsigned int channel) {
+    if(channel >= (unsigned int) this->settings->scope.voltage.count())
+        return;
+
+    this->updateVoltageDetails(channel);
+
+}
+
 /// \brief Handles usedChanged signal from the voltage dock.
 /// \param channel The channel whose used-state was changed.
 /// \param used The new used-state for the channel.

@@ -766,6 +766,7 @@ void VoltageDock::probeGainSelected(int index) {
 			break;
 	if(channel < this->settings->scope.voltage.count()){
 		this->settings->scope.voltage[channel].probe_gain = this->probeGainSteps.at(index);
+        emit probeGainChanged(channel, this->settings->scope.voltage[channel].probe_gain);
 	}
 
 };
