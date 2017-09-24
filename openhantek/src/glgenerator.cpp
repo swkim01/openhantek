@@ -209,7 +209,7 @@ void GlGenerator::generateGraphs() {
 
 							for(unsigned int position = 0; position < sampleCount; ++position) {
 								*(glIterator++) = position * horizontalFactor - DIVS_TIME / 2;
-								*(glIterator++) = *(dataIterator++) / gain  + offset;
+								*(glIterator++) = *(dataIterator++) / gain + offset;
 							}
 						}
 						else {
