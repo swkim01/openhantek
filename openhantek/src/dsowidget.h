@@ -114,8 +114,10 @@ class DsoWidget : public QWidget {
 		void updateMathMode();
 		void updateVoltageGain(unsigned int channel);
 		void updateVoltageUsed(unsigned int channel, bool used);
-		
-		// Menus
+		void updateProbeGain(unsigned int channel);
+
+
+	// Menus
 		void updateRecordLength(unsigned long size);
 		
 		// Export

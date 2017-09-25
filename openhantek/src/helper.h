@@ -40,7 +40,8 @@ namespace Helper {
 	enum Unit {
 		UNIT_VOLTS, UNIT_DECIBEL,
 		UNIT_SECONDS, UNIT_HERTZ,
-		UNIT_SAMPLES, UNIT_COUNT
+		UNIT_SAMPLES, UNIT_COUNT,
+		UNIT_TIMES
 	};
 	
 	QString libUsbErrorString(int error);

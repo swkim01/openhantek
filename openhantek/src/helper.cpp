@@ -134,6 +134,9 @@ namespace Helper {
 				else
 					return QApplication::tr("%L1 GS").arg(value / 1e9, 0, format, (precision <= 0) ? precision : qMax(0, precision + 8 - logarithm));
 			}
+			case UNIT_TIMES:{
+				return QApplication::tr("X%L1").arg(value);
+			}
 			default:
 				return QString();
 		}

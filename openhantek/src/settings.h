@@ -127,6 +127,7 @@ struct DsoSettingsScopeSpectrum {
 struct DsoSettingsScopeVoltage {
 	double gain; ///< The vertical resolution in V/div
 	int misc; ///< Different enums, coupling for real- and mode for math-channels
+    double probe_gain;
 	QString name; ///< Name of this channel
 	double offset; ///< Vertical offset in divs
 	double trigger; ///< Trigger level in V
